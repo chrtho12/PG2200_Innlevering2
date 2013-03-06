@@ -7,63 +7,67 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using XNA_Innlevering2.GameComponents;
+using XNA_Innlevering2.GameObjects;
 
 namespace XNA_Innlevering2
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
-    
+
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
+
         SpriteBatch spriteBatch;
+
+        //initialize fields for the different game components
+        private InputComponent inputHandler;
+        private SoundEffectComponent soundHandler;
+        private TextRenderingComponent textHandler;
+        private ObjectCollisionComponent collisionHandler;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            inputHandler = new InputComponent(this);
+            soundHandler = new SoundEffectComponent(this);
+            textHandler = new TextRenderingComponent(this);
+            collisionHandler = new ObjectCollisionComponent(this);
+
             Content.RootDirectory = "Content";
+            IsMouseVisible = true;
+
+            
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
+  
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            //add the different game objects to the game's components list
+            Components.Add(inputHandler);
+            Components.Add(soundHandler);
+            Components.Add(textHandler);
+            Components.Add(collisionHandler);
 
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
+
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            
             // TODO: use this.Content to load your game content here
+
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
+
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
@@ -75,15 +79,14 @@ namespace XNA_Innlevering2
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            spriteBatch.Begin();
             // TODO: Add your drawing code here
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
