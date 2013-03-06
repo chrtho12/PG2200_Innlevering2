@@ -43,3 +43,4 @@ states: restart, avslutt, pause, win, game over = 15
 inventory = 15 (bruk og henting av piler puttes i inventory)
 et spilldesign som funker = 25
 
+change
