@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace XNA_Innlevering2.Abstract
 {
+    
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
@@ -22,7 +23,7 @@ namespace XNA_Innlevering2.Abstract
         public GameStateManager(Game game)
             : base(game)
         {
-            // TODO: Construct any child components here
+            _states = null;
         }
 
         public void Push(GameState state)
@@ -30,9 +31,9 @@ namespace XNA_Innlevering2.Abstract
             _states.AddFirst(state);
         }
 
-        public void Pop(GameState state)
+        public void Pop()
         {
-            _states.RemoveFirst(state);
+            _states.RemoveFirst();
         }
 
         /// <summary>
@@ -65,7 +66,7 @@ namespace XNA_Innlevering2.Abstract
             base.Draw(gameTime);
         }
 
-        private void _Draw(LinkedListNode<State> node, GameTime time)
+        private void _Draw(LinkedListNode<GameState> node, GameTime time)
         {
             node.Value.Draw(time);
 
@@ -73,8 +74,8 @@ namespace XNA_Innlevering2.Abstract
                 _Draw(node.Next, time);
         }
     }
-    
-    abstract class State
+
+    public abstract class GameState
     {
         protected GameComponentCollection _components;
 
@@ -82,13 +83,13 @@ namespace XNA_Innlevering2.Abstract
 
         public virtual bool BlockDraw { get { return true; } }
 
-        public State(GameStateManager _stateManager, GraphicsDevice graphics) // TODO: throw in spritebatch as argument too?
-        {
-            
-        }
+        protected GameState(GameStateManager _stateManager, GraphicsDevice graphics, SpriteBatch spriteBatch) // TODO: create a new spritebatch in constructor instead?
+        { }
 
         public abstract void initialize();
+
         public abstract void Update(GameTime gameTime);
+
         public abstract void Draw(GameTime gameTime);
 
     }

@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Media;
 using XNA_Innlevering2.Abstract;
 using XNA_Innlevering2.GameComponents;
 using XNA_Innlevering2.GameObjects;
+using XNA_Innlevering2.GameStates;
 using XNA_Innlevering2.Map;
 
 namespace XNA_Innlevering2
@@ -29,6 +30,8 @@ namespace XNA_Innlevering2
         private ObjectCollisionComponent collisionManager;
         private LevelManagerComponent levelManager;
 
+        private GameStateManager _gameStates;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -41,6 +44,9 @@ namespace XNA_Innlevering2
 
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
+            _gameStates = new GameStateManager(this);
+            _gameStates.Push(new PauseState(_gameStates, graphics));
 
         }
 
