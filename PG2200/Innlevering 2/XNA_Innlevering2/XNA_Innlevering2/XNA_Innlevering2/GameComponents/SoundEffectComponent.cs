@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Media;
 namespace XNA_Innlevering2.GameComponents
 {
     /// <summary>
-    /// This is a game component that implements IUpdateable.
+    /// This is a game component that implements IUpdateable. Sounds.
     /// </summary>
     public class SoundEffectComponent : Microsoft.Xna.Framework.GameComponent
     {
