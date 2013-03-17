@@ -8,17 +8,14 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using XNA_Innlevering2.Abstract;
+using XNA_Innlevering2.GameObjects;
 
 
 namespace XNA_Innlevering2
 {
 
-    public interface IInputService
-    {
-        void GetKeyboardState();
-    }
-
-    public class InputComponent : Microsoft.Xna.Framework.GameComponent, IInputService
+    public class InputComponent : GameComponent
     {
         private MouseState currentMouseState, previousMouseState;
         private KeyboardState currentKeyboardState, previousKeyboardState;
@@ -26,10 +23,8 @@ namespace XNA_Innlevering2
         public InputComponent(Game game)
             : base(game)
         {
-            game.Services.AddService(typeof(IInputService), this);
         }
 
-  
         public override void Update(GameTime gameTime)
         {
             previousMouseState = currentMouseState;
@@ -45,10 +40,27 @@ namespace XNA_Innlevering2
 
         public void GetKeyboardState()
         {
-            if (currentKeyboardState != previousKeyboardState)
+            
+            if(currentKeyboardState.IsKeyDown(Keys.W))
             {
-                Console.WriteLine("PRESS!");
+                Camera.Move(new Vector2(0f, -10f));
             }
+
+            if (currentKeyboardState.IsKeyDown(Keys.S))
+            {
+                Camera.Move(new Vector2(0f, 10f));
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.A))
+            {
+                Camera.Move(new Vector2(-10f, 0f));
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.D))
+            {
+                Camera.Move(new Vector2(10f, 0f));
+            }
+
         }
     }
 }

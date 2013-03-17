@@ -7,24 +7,23 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace XNA_Innlevering2.GameObjects
 {
-    class GameObject : DrawableGameComponent
+
+    public class GameObject
     {
-        protected GameObject(Game game) : base(game)
+        public Vector2 Position { get; private set; }
+        public Texture2D Sprite { get; private set; }
+        public Rectangle Bounds { get; private set; }
+
+        public GameObject(Texture2D sprite, Vector2 position)
         {
+            Position = position;
+            Sprite = sprite;
         }
 
-        public Vector2 position { get; set; }
-        public Texture2D sprite { get; set; }
-        public Rectangle bounds { get; set; }
-
-        public void Draw(SpriteBatch sb)
+        public GameObject(Vector2 position)
         {
-            sb.Draw(sprite, position, Color.White);
-        }
-
-        public void Update()
-        {
-            bounds = new Rectangle((int)position.X, (int)position.Y, sprite.Width, sprite.Height); 
+            Position = position;
+            Sprite = null;
         }
 
     }

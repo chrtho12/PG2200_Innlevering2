@@ -7,48 +7,57 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using XNA_Innlevering2.Abstract;
 using XNA_Innlevering2.GameComponents;
 using XNA_Innlevering2.GameObjects;
+using XNA_Innlevering2.Map;
 
 namespace XNA_Innlevering2
 {
 
-    public class Game1 : Microsoft.Xna.Framework.Game
+    //TODO: revise the camera class and functionality - reason for weird draw artifacts with the tiles
+
+    public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
 
         SpriteBatch spriteBatch;
 
-        //initialize fields for the different game components
         private InputComponent inputHandler;
-        private SoundEffectComponent soundHandler;
-        private TextRenderingComponent textHandler;
-        private ObjectCollisionComponent collisionHandler;
+        private SoundEffectComponent soundManager;
+        private TextRenderingComponent textManager;
+        private ObjectCollisionComponent collisionManager;
+        private LevelManagerComponent levelManager;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            
             inputHandler = new InputComponent(this);
-            soundHandler = new SoundEffectComponent(this);
-            textHandler = new TextRenderingComponent(this);
-            collisionHandler = new ObjectCollisionComponent(this);
+            soundManager = new SoundEffectComponent(this);
+            textManager = new TextRenderingComponent(this);
+            collisionManager = new ObjectCollisionComponent(this);
+            levelManager = new LevelManagerComponent(this, Content);
 
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
-            
         }
 
-  
+
         protected override void Initialize()
         {
             //add the different game objects to the game's components list
             Components.Add(inputHandler);
-            Components.Add(soundHandler);
-            Components.Add(textHandler);
-            Components.Add(collisionHandler);
+            Components.Add(soundManager);
+            Components.Add(textManager);
+            Components.Add(collisionManager);
+            Components.Add(levelManager);
 
             base.Initialize();
+
+            Services.AddService(typeof(SpriteBatch), spriteBatch);
+
         }
 
 
@@ -56,6 +65,7 @@ namespace XNA_Innlevering2
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
             
             // TODO: use this.Content to load your game content here
 
@@ -85,7 +95,9 @@ namespace XNA_Innlevering2
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
+            
             // TODO: Add your drawing code here
+
             spriteBatch.End();
 
             base.Draw(gameTime);

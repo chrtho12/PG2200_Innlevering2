@@ -12,10 +12,12 @@ using Microsoft.Xna.Framework.Media;
 
 namespace XNA_Innlevering2.GameComponents
 {
-    
-    public class TextRenderingComponent : Microsoft.Xna.Framework.GameComponent
+    /// <summary>
+    /// This is a game component that implements IUpdateable.
+    /// </summary>
+    public class UserInterfaceComponent : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        public TextRenderingComponent(Game game)
+        public UserInterfaceComponent(Game game)
             : base(game)
         {
             // TODO: Construct any child components here
