@@ -60,6 +60,7 @@ namespace XNA_Innlevering2
             // Components.Add(collisionManager);
             // Components.Add(levelManager);
             Components.Add(_gameStateManager);
+            
 
             base.Initialize();
 

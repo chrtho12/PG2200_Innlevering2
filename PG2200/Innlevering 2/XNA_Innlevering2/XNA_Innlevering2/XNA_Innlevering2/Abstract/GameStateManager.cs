@@ -8,32 +8,32 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using XNA_Innlevering2.GameStates;
 
 
 namespace XNA_Innlevering2.Abstract
 {
-    
-    /// <summary>
-    /// This is a game component that implements IUpdateable.
-    /// </summary>
-    public class GameStateManager : Microsoft.Xna.Framework.DrawableGameComponent
+    public class GameStateManager : DrawableGameComponent
     {
         private LinkedList<GameState> _states;
+        private SpriteBatch _spriteBatch;
         
         public GameStateManager(Game game)
             : base(game)
         {
-            _states = null;
+            _states = new LinkedList<GameState>();
         }
 
         public void Push(GameState state)
         {
             _states.AddFirst(state);
+            Console.WriteLine("State pushed onto stack: " + state);
         }
 
         public void Pop()
         {
             _states.RemoveFirst();
+            Console.WriteLine("State removed from stack");
         }
 
         /// <summary>
@@ -53,45 +53,29 @@ namespace XNA_Innlevering2.Abstract
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            // TODO: Add your update code here
+            if (_states.First.Value.StopUpdate)
+                _states.First.Value.Update(gameTime);
 
             base.Update(gameTime);
         }
 
+        private void _Draw(LinkedListNode<GameState> node, GameTime gameTime)
+        {
+            //node.Value.Draw(gameTime);
 
+            //if (!node.Value.StopDraw)
+            //    _Draw(node.Next, gameTime);
+        }
+        
         public override void Draw(GameTime gameTime)
         {
-            _Draw(_states.First, gameTime);
-            
-            base.Draw(gameTime);
+            if (_states.First.Value.StopDraw)
+                _states.First.Value.Draw(gameTime);     
         }
 
-        private void _Draw(LinkedListNode<GameState> node, GameTime time)
-        {
-            node.Value.Draw(time);
-
-            if(!node.Value.BlockDraw)
-                _Draw(node.Next, time);
-        }
+        
     }
 
-    public abstract class GameState
-    {
-        protected GameComponentCollection _components;
-
-        public virtual bool BlockUpdate { get { return true; } }
-
-        public virtual bool BlockDraw { get { return true; } }
-
-        protected GameState(GameStateManager _stateManager, GraphicsDevice graphics, SpriteBatch spriteBatch) // TODO: create a new spritebatch in constructor instead?
-        { }
-
-        public abstract void initialize();
-
-        public abstract void Update(GameTime gameTime);
-
-        public abstract void Draw(GameTime gameTime);
-
-    }
+    
 
 }
