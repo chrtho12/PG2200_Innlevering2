@@ -15,7 +15,7 @@ using XNA_Innlevering2.Map;
 namespace XNA_Innlevering2
 {
 
-    //TODO: revise the camera class and functionality - reason for weird draw artifacts with the tiles
+    //TODO: revise the camera class and functionality - reason for weird draw artifacts with the tiles.
 
     public class Game1 : Game
     {
