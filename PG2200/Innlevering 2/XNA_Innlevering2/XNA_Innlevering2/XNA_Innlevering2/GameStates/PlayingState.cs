@@ -1,33 +1,26 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using XNA_Innlevering2.Abstract;
-
 
 namespace XNA_Innlevering2.GameStates
 {
-
-    public class PauseState : GameState
+    public class PlayingState : GameState
     {
         private GraphicsDevice _graphics;
+        public new GameComponentCollection _components;
 
-         public PauseState(GameStateManager gameStateManager, GraphicsDevice graphics)
+        public PlayingState(GameStateManager gameStateManager, GraphicsDevice graphics)
             : base(gameStateManager, graphics)
         {
             _graphics = graphics;
         }
 
-
         public override void initialize()
         {
-            throw new NotImplementedException();
         }
 
         public override void Update(GameTime gameTime)
@@ -37,7 +30,7 @@ namespace XNA_Innlevering2.GameStates
 
         public override void Draw(GameTime gameTime)
         {
-            _graphics.Clear(Color.Turquoise);
+            _graphics.Clear(Color.YellowGreen);
         }
     }
 }

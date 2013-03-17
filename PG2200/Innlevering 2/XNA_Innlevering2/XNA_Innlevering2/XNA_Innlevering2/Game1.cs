@@ -24,46 +24,50 @@ namespace XNA_Innlevering2
 
         SpriteBatch spriteBatch;
 
-        private InputComponent inputHandler;
-        private SoundEffectComponent soundManager;
-        private TextRenderingComponent textManager;
-        private ObjectCollisionComponent collisionManager;
-        private LevelManagerComponent levelManager;
+        public InputComponent inputHandler;
+        public LevelManagerComponent levelManager;
+        public SoundEffectComponent soundManager;
+        public TextRenderingComponent textManager;
+        public ObjectCollisionComponent collisionManager;
 
-        private GameStateManager _gameStates;
+        private GameStateManager _gameStateManager;
+        private GameState currentPlayState;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             
             inputHandler = new InputComponent(this);
+            levelManager = new LevelManagerComponent(this, Content);
             soundManager = new SoundEffectComponent(this);
             textManager = new TextRenderingComponent(this);
             collisionManager = new ObjectCollisionComponent(this);
-            levelManager = new LevelManagerComponent(this, Content);
+           
 
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
-            _gameStates = new GameStateManager(this);
-            _gameStates.Push(new PauseState(_gameStates, graphics));
+            _gameStateManager = new GameStateManager(this);
 
         }
 
 
         protected override void Initialize()
         {
-            //add the different game objects to the game's components list
-            Components.Add(inputHandler);
-            Components.Add(soundManager);
-            Components.Add(textManager);
-            Components.Add(collisionManager);
-            Components.Add(levelManager);
+            // Components.Add(inputHandler);
+            // Components.Add(soundManager);
+            // Components.Add(textManager);
+            // Components.Add(collisionManager);
+            // Components.Add(levelManager);
+            Components.Add(_gameStateManager);
 
             base.Initialize();
 
             Services.AddService(typeof(SpriteBatch), spriteBatch);
-
+           
+            currentPlayState = new PauseState(_gameStateManager, GraphicsDevice);
+            _gameStateManager.Push(currentPlayState);
+          
         }
 
 
@@ -90,8 +94,6 @@ namespace XNA_Innlevering2
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
-
             base.Update(gameTime);
         }
 
@@ -101,8 +103,6 @@ namespace XNA_Innlevering2
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-            
-            // TODO: Add your drawing code here
 
             spriteBatch.End();
 
