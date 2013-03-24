@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using XNA_Innlevering2.Abstract;
 
 namespace XNA_Innlevering2.GameObjects
 {
-
     public class GameObject
     {
         public Vector2 Position { get; private set; }

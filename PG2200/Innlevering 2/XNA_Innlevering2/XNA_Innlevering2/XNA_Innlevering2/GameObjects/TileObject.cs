@@ -21,7 +21,7 @@ namespace XNA_Innlevering2.GameObjects
 
         public TileObject( Texture2D sprite, Vector2 position)
             : base(sprite, position)
-        { }
+        {}
        
     }
 

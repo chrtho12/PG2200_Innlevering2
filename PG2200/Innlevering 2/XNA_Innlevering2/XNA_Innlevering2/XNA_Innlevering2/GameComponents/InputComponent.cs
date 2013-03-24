@@ -15,6 +15,11 @@ using XNA_Innlevering2.GameObjects;
 namespace XNA_Innlevering2
 {
 
+    interface IControllable
+    {
+        void KeyboardState();
+    }
+
     public class InputComponent : GameComponent
     {
         private MouseState currentMouseState, previousMouseState;
@@ -40,7 +45,6 @@ namespace XNA_Innlevering2
 
         public void GetKeyboardState()
         {
-            
             if(currentKeyboardState.IsKeyDown(Keys.W))
             {
                 Camera.Move(new Vector2(0f, -10f));

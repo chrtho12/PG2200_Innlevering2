@@ -8,15 +8,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using XNA_Innlevering2.Abstract;
-using XNA_Innlevering2.GameComponents;
 using XNA_Innlevering2.GameObjects;
-using XNA_Innlevering2.GameStates;
-using XNA_Innlevering2.Map;
+
 
 namespace XNA_Innlevering2
 {
-
-    //TODO: revise the camera class and functionality - reason for weird draw artifacts with the tiles.
 
     public class Game1 : Game
     {
@@ -25,50 +21,33 @@ namespace XNA_Innlevering2
         SpriteBatch spriteBatch;
 
         public InputComponent inputHandler;
-        public LevelManagerComponent levelManager;
-        public SoundEffectComponent soundManager;
-        public TextRenderingComponent textManager;
-        public ObjectCollisionComponent collisionManager;
+        private SpriteManager spriteManager;
+        private LevelManager levelManager;
 
-        private GameStateManager _gameStateManager;
-        private GameState currentPlayState;
+        
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             
             inputHandler = new InputComponent(this);
-            levelManager = new LevelManagerComponent(this, Content);
-            soundManager = new SoundEffectComponent(this);
-            textManager = new TextRenderingComponent(this);
-            collisionManager = new ObjectCollisionComponent(this);
-           
-
+            spriteManager = new SpriteManager(this);
+            levelManager = new LevelManager(this);
+            
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-
-            _gameStateManager = new GameStateManager(this);
 
         }
 
 
         protected override void Initialize()
         {
-            // Components.Add(inputHandler);
-            // Components.Add(soundManager);
-            // Components.Add(textManager);
-            // Components.Add(collisionManager);
-            // Components.Add(levelManager);
-            Components.Add(_gameStateManager);
+            Components.Add(levelManager);
+            Components.Add(inputHandler);
+            Components.Add(spriteManager);
             
-
             base.Initialize();
-
-            Services.AddService(typeof(SpriteBatch), spriteBatch);
-           
-            currentPlayState = new PauseState(_gameStateManager, GraphicsDevice);
-            _gameStateManager.Push(currentPlayState);
-          
+            
         }
 
 
@@ -76,12 +55,13 @@ namespace XNA_Innlevering2
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            Console.WriteLine("loading game1 content...");
 
+            levelManager.BuildNewLevel(new Vector2(4, 4));
             
             // TODO: use this.Content to load your game content here
 
         }
-
 
         protected override void UnloadContent()
         {
@@ -104,6 +84,7 @@ namespace XNA_Innlevering2
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
+
 
             spriteBatch.End();
 
