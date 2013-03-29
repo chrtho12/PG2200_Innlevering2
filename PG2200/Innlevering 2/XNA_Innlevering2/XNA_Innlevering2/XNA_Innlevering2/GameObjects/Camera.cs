@@ -10,6 +10,8 @@ namespace XNA_Innlevering2.GameObjects
 {
     public class Camera
     {
+        //TODO: check github variant of camera from lecture
+
         public static SpriteBatch SpriteBatch { get; set; }
 
         public static Vector2 position { get; set; }
