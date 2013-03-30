@@ -20,32 +20,36 @@ namespace XNA_Innlevering2
 
         SpriteBatch spriteBatch;
 
-        public InputComponent inputHandler;
-        private SpriteManager spriteManager;
-        private LevelManager levelManager;
+        private InputComponent _inputHandler;
+        private SpriteComponent _spriteComponent;
+        private LevelManager _levelManager;
 
-        
+        private PlayerObject _player;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             
-            inputHandler = new InputComponent(this);
-            spriteManager = new SpriteManager(this);
-            levelManager = new LevelManager(this);
+            _inputHandler = new InputComponent(this);
+
+            _spriteComponent = new SpriteComponent(this);
+            Services.AddService(typeof(SpriteComponent), _spriteComponent);    
+
+            _levelManager = new LevelManager(this);
             
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
 
         }
 
 
         protected override void Initialize()
         {
-            Components.Add(levelManager);
-            Components.Add(inputHandler);
-            Components.Add(spriteManager);
-            
+            Components.Add(_levelManager);
+            Components.Add(_inputHandler);
+            Components.Add(_spriteComponent);
+
             base.Initialize();
             
         }
@@ -57,8 +61,14 @@ namespace XNA_Innlevering2
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Console.WriteLine("loading game1 content...");
 
-            levelManager.BuildNewLevel(new Vector2(4, 4));
+            _levelManager.BuildNewLevel(new Vector2(4, 4));
             
+            if(_player == null)
+            {
+                _player = new PlayerObject(Content.Load<Texture2D>(@"sprites\BlockTile"), new Vector2(20, 20));
+                _spriteComponent.AddNew(_player);
+            }
+                
             // TODO: use this.Content to load your game content here
 
         }

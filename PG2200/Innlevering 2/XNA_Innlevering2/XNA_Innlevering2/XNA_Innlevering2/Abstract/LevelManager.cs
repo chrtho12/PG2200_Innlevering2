@@ -20,7 +20,7 @@ namespace XNA_Innlevering2.Abstract
         private SpriteBatch _spriteBatch;
 
         private Camera _camera = new Camera();
-
+ 
         public int LevelCount { get; private set; }
 
         public LevelManager(Game game)
@@ -40,7 +40,7 @@ namespace XNA_Innlevering2.Abstract
         public override void Initialize()
         {
             _currentLevel = new List<TileObject>();
-
+            
             base.Initialize();
         }
 

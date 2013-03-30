@@ -10,8 +10,7 @@ namespace XNA_Innlevering2.Map
 {
     public class LevelObject
     {
-        private int _heightOffset = 0;
-        private int _widthOffset = 0;
+        private List<TileObject> _level; 
 
         private Texture2D _tile;
         private Vector2 _size;
@@ -20,6 +19,26 @@ namespace XNA_Innlevering2.Map
         {
             _tile = tile;
             _size = size;
+
+            Generate();
+        }
+
+        private void Generate()
+        {
+            int heightOffset = 0;
+            int widthOffset = 0;
+
+            for (int i = 0; i < _size.Y; i++)
+            {
+                for (int j = 0; j < _size.X; j++)
+                {
+                    _level.Add(new TileObject(_tile, new Vector2(widthOffset, heightOffset)));
+                    widthOffset += _tile.Width;
+                }
+
+                heightOffset += _tile.Height / 2;
+                widthOffset = 0;
+            }
         }
     }
 }
