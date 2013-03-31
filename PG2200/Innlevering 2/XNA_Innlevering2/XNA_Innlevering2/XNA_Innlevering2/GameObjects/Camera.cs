@@ -2,24 +2,37 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using XNA_Innlevering2.GameComponents;
 
 namespace XNA_Innlevering2.GameObjects
 {
-    public class Camera
+    public class Camera : IUpdateable
     {
         //TODO: check github variant of camera from lecture
 
-        public static SpriteBatch SpriteBatch { get; set; }
+        public SpriteBatch SpriteBatch { get; set; }
 
-        public static Vector2 position { get; set; }
+        public Vector2 position { get; set; }
         public Matrix transform { get; set; }
+
+        private InputManager _inputManager;
 
         public Camera()
         {
             position = Vector2.Zero;
+            _inputManager = new InputManager();
+
+            _inputManager.AddAction("move camera up");
+            _inputManager["move camera up"].Add(Keys.W);
+            _inputManager.AddAction("move camera down");
+            _inputManager["move camera down"].Add(Keys.S);
+            _inputManager.AddAction("move camera left");
+            _inputManager["move camera left"].Add(Keys.A);
+            _inputManager.AddAction("move camera right");
+            _inputManager["move camera right"].Add(Keys.D);
         }
 
-        public static void Move(Vector2 amount)
+        public void Move(Vector2 amount)
         {
             position += amount;
         }
@@ -31,6 +44,26 @@ namespace XNA_Innlevering2.GameObjects
             return transform;
         }
 
+        public void Update(GameTime gameTime)
+        {
+
+            _inputManager.Update();
+
+            if (_inputManager["move camera up"].IsDown)
+                Move(new Vector2(0f, -10f));
+            if (_inputManager["move camera down"].IsDown)
+                Move(new Vector2(0f, 10f));
+            if (_inputManager["move camera left"].IsDown)
+                Move(new Vector2(-10f, 0f));
+            if (_inputManager["move camera right"].IsDown)
+                Move(new Vector2(10f, 0f));
+
+        }
+
+        public bool Enabled { get; private set; }
+        public int UpdateOrder { get; private set; }
+        public event EventHandler<EventArgs> EnabledChanged;
+        public event EventHandler<EventArgs> UpdateOrderChanged;
     }
 
 }
