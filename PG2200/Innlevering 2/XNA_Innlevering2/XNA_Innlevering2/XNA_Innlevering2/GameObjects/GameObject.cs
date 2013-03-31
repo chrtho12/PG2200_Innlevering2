@@ -10,9 +10,9 @@ namespace XNA_Innlevering2.GameObjects
 {
     public class GameObject
     {
-        public Vector2 Position { get; private set; }
-        public Texture2D Sprite { get; private set; }
-        public Rectangle Bounds { get; private set; }
+        public Vector2 Position;
+        public Texture2D Sprite;
+        public Rectangle Bounds;
 
         public GameObject(Texture2D sprite, Vector2 position)
         {

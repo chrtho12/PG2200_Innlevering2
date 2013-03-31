@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using XNA_Innlevering2.Abstract;
+using XNA_Innlevering2.GameComponents;
 using XNA_Innlevering2.GameObjects;
 
 
@@ -20,9 +21,14 @@ namespace XNA_Innlevering2
 
         SpriteBatch spriteBatch;
 
-        private InputComponent _inputHandler;
+        //private InputComponent _inputHandler;
+        private NewInputManager _newInputManager;
+        
+        
         private SpriteComponent _spriteComponent;
-        private LevelManager _levelManager;
+        //private LevelManager _levelManager;
+
+        private NewLevelManager _newLevelManager;
 
         private PlayerObject _player;
 
@@ -30,12 +36,14 @@ namespace XNA_Innlevering2
         {
             graphics = new GraphicsDeviceManager(this);
             
-            _inputHandler = new InputComponent(this);
+            //_inputHandler = new InputComponent(this);
+            _newInputManager = new NewInputManager(this);
 
             _spriteComponent = new SpriteComponent(this);
             Services.AddService(typeof(SpriteComponent), _spriteComponent);    
 
-            _levelManager = new LevelManager(this);
+            //_levelManager = new LevelManager(this);
+            _newLevelManager = new NewLevelManager(this);
             
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -46,9 +54,10 @@ namespace XNA_Innlevering2
 
         protected override void Initialize()
         {
-            Components.Add(_levelManager);
-            Components.Add(_inputHandler);
+            //Components.Add(_levelManager);
+            //Components.Add(_inputHandler);
             Components.Add(_spriteComponent);
+            Components.Add(_newInputManager);
 
             base.Initialize();
             
@@ -61,13 +70,11 @@ namespace XNA_Innlevering2
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Console.WriteLine("loading game1 content...");
 
-            _levelManager.BuildNewLevel(new Vector2(4, 4));
+            //_levelManager.BuildNewLevel(new Vector2(4, 4));
+
+            _newLevelManager.GenerateNewLevel(new Vector2(4,4));
             
-            if(_player == null)
-            {
-                _player = new PlayerObject(Content.Load<Texture2D>(@"sprites\BlockTile"), new Vector2(20, 20));
-                _spriteComponent.AddNew(_player);
-            }
+            SpawnPlayer();
                 
             // TODO: use this.Content to load your game content here
 
@@ -85,6 +92,8 @@ namespace XNA_Innlevering2
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            
+
             base.Update(gameTime);
         }
 
@@ -99,6 +108,12 @@ namespace XNA_Innlevering2
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private void SpawnPlayer()
+        {
+            _player = new PlayerObject(Content.Load<Texture2D>(@"sprites\Player"), new Vector2(0, 0));
+            _spriteComponent.AddNew(_player);
         }
     }
 }
