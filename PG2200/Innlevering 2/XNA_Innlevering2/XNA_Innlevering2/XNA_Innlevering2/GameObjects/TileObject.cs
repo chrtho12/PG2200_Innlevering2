@@ -9,11 +9,11 @@ namespace XNA_Innlevering2.GameObjects
 {
     public class TileObject : GameObject 
     {
-        public Texture2D TileDecal { get; private set; }
+        public Texture2D Decal { get; set; }
         
         public TileObject(Texture2D sprite, Vector2 position, Texture2D decal) : base(sprite, position)
         {
-            TileDecal = decal;
+            Decal = decal;
         }
 
         public TileObject(Vector2 position) : base(position)

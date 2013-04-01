@@ -22,10 +22,12 @@ namespace XNA_Innlevering2
         SpriteBatch spriteBatch;
 
         private SpriteComponent _spriteComponent;
+        private InterfaceComponent _interfaceComponent;
 
         private LevelManager _levelManager;
 
-        private PlayerObject _player;
+        public const int WindowHeight = 800;
+        public const int WindowWidth = 600;
 
         public Game1()
         {
@@ -34,16 +36,24 @@ namespace XNA_Innlevering2
             _spriteComponent = new SpriteComponent(this);
             Services.AddService(typeof(SpriteComponent), _spriteComponent);    
 
+            _interfaceComponent = new InterfaceComponent(this);
+            Services.AddService(typeof(InterfaceComponent), _interfaceComponent);    
+
             _levelManager = new LevelManager(this);
             
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
+            graphics.PreferredBackBufferHeight = WindowHeight;
+            graphics.PreferredBackBufferWidth = WindowWidth;
         }
 
 
         protected override void Initialize()
         {
             Components.Add(_spriteComponent);
+            Components.Add(_interfaceComponent);
+            Components.Add(_levelManager);
 
             base.Initialize();
         }
@@ -52,21 +62,13 @@ namespace XNA_Innlevering2
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            Console.WriteLine("loading game1 content...");
 
-            _levelManager.GenerateNewLevel(new Vector2(4,4));
-
-            _player = new PlayerObject(Content.Load<Texture2D>(@"sprites\Player"), new Vector2(0, 0));
-            _spriteComponent.AddNew(_player);
-            
-                
-            // TODO: use this.Content to load your game content here
+            _levelManager.GenerateNewLevel(new Vector2(4, 4));
 
         }
 
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
         }
 
 
@@ -74,8 +76,6 @@ namespace XNA_Innlevering2
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-
-            _player.Update(gameTime);
 
             base.Update(gameTime);
         }

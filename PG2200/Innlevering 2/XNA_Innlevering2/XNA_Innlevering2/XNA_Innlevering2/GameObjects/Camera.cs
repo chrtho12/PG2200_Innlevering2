@@ -6,10 +6,8 @@ using XNA_Innlevering2.GameComponents;
 
 namespace XNA_Innlevering2.GameObjects
 {
-    public class Camera : IUpdateable
+    public class Camera
     {
-        //TODO: check github variant of camera from lecture
-
         public SpriteBatch SpriteBatch { get; set; }
 
         public Vector2 position { get; set; }
@@ -39,12 +37,12 @@ namespace XNA_Innlevering2.GameObjects
 
         public Matrix GetTransformation(GraphicsDevice graphicsDevice)
         {
-            transform = Matrix.CreateTranslation(new Vector3(-position.X, -position.Y, 0)) * Matrix.CreateTranslation(new Vector3(graphicsDevice.Viewport.Width * 0.5f, graphicsDevice.Viewport.Height * 0.5f, 0));
+            transform = Matrix.CreateTranslation(new Vector3(-position.X, -position.Y, 0)) * Matrix.CreateTranslation(new Vector3(Game1.WindowWidth * 0.15f, Game1.WindowHeight * 0.35f, 0));
 
             return transform;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update()
         {
 
             _inputManager.Update();
@@ -60,10 +58,7 @@ namespace XNA_Innlevering2.GameObjects
 
         }
 
-        public bool Enabled { get; private set; }
-        public int UpdateOrder { get; private set; }
-        public event EventHandler<EventArgs> EnabledChanged;
-        public event EventHandler<EventArgs> UpdateOrderChanged;
+        
     }
 
 }
