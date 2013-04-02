@@ -12,14 +12,21 @@ namespace XNA_Innlevering2.GameObjects
     {
         public Vector2 Position;
         public Texture2D Sprite;
+        public Texture2D Decal;
         public Rectangle Bounds;
 
         public GameObject(Texture2D sprite, Vector2 position)
         {
             Position = position;
             Sprite = sprite;
+            Decal = null;
 
             Bounds = new Rectangle((int)position.X, (int)position.Y, sprite.Width, sprite.Height);
+        }
+
+        public GameObject(Texture2D sprite, Vector2 position, Texture2D decal) : this(sprite, position)
+        {
+            Decal = decal;
         }
 
 
