@@ -44,7 +44,6 @@ namespace XNA_Innlevering2.GameObjects
 
         public void Update()
         {
-
             _inputManager.Update();
 
             if (_inputManager["move camera up"].IsDown)

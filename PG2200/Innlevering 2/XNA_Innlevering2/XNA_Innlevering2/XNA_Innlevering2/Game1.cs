@@ -22,9 +22,11 @@ namespace XNA_Innlevering2
         SpriteBatch spriteBatch;
 
         private SpriteComponent _spriteComponent;
+        private CollisionComponent _collisionComponent;
+
         private InterfaceComponent _interfaceComponent;
 
-        private LevelManager _levelManager;
+        private SceneManager _sceneManager;
 
         public const int WindowHeight = 800;
         public const int WindowWidth = 600;
@@ -39,7 +41,10 @@ namespace XNA_Innlevering2
             _interfaceComponent = new InterfaceComponent(this);
             Services.AddService(typeof(InterfaceComponent), _interfaceComponent);    
 
-            _levelManager = new LevelManager(this);
+            _collisionComponent = new CollisionComponent(this);
+            Services.AddService(typeof(CollisionComponent), _collisionComponent);    
+
+            _sceneManager = new SceneManager(this);
             
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -53,7 +58,8 @@ namespace XNA_Innlevering2
         {
             Components.Add(_spriteComponent);
             Components.Add(_interfaceComponent);
-            Components.Add(_levelManager);
+            Components.Add(_sceneManager);
+            Components.Add(_collisionComponent);
 
             base.Initialize();
         }
@@ -63,7 +69,7 @@ namespace XNA_Innlevering2
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _levelManager.GenerateNewLevel(new Vector2(4, 4));
+            _sceneManager.GenerateNewLevel(new Vector2(4, 4));
 
         }
 
