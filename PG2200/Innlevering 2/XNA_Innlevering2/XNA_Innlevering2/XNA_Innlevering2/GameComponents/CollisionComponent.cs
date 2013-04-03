@@ -19,7 +19,8 @@ namespace XNA_Innlevering2.Abstract
     public class CollisionComponent : GameComponent, ICollidable
     {
         private List<GameObject> _sceneObjects;
-        private PlayerObject _player;
+
+        public bool IsColliding;
 
         public CollisionComponent(Game game)
             : base(game)
@@ -36,11 +37,15 @@ namespace XNA_Innlevering2.Abstract
 
         public override void Update(GameTime gameTime)
         {
-            _player = (PlayerObject)Game.Services.GetService(typeof(PlayerObject));
+            PlayerObject _player = (PlayerObject)Game.Services.GetService(typeof(PlayerObject));
+            PuzzleObject _puzzle = (PuzzleObject) Game.Services.GetService(typeof (PuzzleObject));
 
             foreach (var obj in _sceneObjects.Where(obj => _player.Bounds.Intersects(obj.Bounds)))
             {
-                Console.WriteLine("collision at: " + obj.Position.X + "," + obj.Position.Y);
+                if (obj.Index == _puzzle.Answer)
+                {
+                    _player.IsColliding = true;    
+                } 
             }
             
             base.Update(gameTime);

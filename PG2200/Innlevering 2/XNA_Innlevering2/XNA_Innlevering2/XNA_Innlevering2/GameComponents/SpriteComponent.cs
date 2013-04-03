@@ -34,20 +34,18 @@ namespace XNA_Innlevering2.Abstract
             base.LoadContent();
 
             _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+            _camera = (Camera)Game.Services.GetService(typeof(Camera));
         }
 
         public override void Initialize()
         {
             _sceneObjects = new List<GameObject>();
-            _camera = new Camera();
-
+            
             base.Initialize();
         }
 
         public override void Update(GameTime gameTime)
         {
-            _camera.Update();
-
             base.Update(gameTime);
         }
 

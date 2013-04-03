@@ -15,15 +15,14 @@ namespace XNA_Innlevering2.GameComponents
 {
     interface IControllable
     {
-        //TODO: use this interface for camera and player
         void RegisterControls();
     }
 
-    public class InputManager
+    public class InputManager : GameComponent
     {
         private List<Action> actions;
 
-        public InputManager()
+        public InputManager(Game game) : base(game)
         {
             actions = new List<Action>();
         }
@@ -49,6 +48,7 @@ namespace XNA_Innlevering2.GameComponents
             {
                 a.Update(kbState);
             }
+
         }
     }
 

@@ -13,7 +13,7 @@ namespace XNA_Innlevering2.Abstract
     class SceneManager : GameComponent
     {
         private int _levelIndex = 0;
-        private PuzzleObject _currentPuzzleObject;
+        public PuzzleObject CurrentPuzzle { get; set; }
 
         public PlayerObject Player;
         private Random _random;
@@ -46,7 +46,7 @@ namespace XNA_Innlevering2.Abstract
             List<int> previousDecalIndexes = new List<int>();
 
             LoadDecals();
-            
+
             for (int i = 0; i < size.Y; i++)
             {
                 for (int j = 0; j < size.X; j++)
@@ -54,12 +54,16 @@ namespace XNA_Innlevering2.Abstract
                     int currentDecalIndex = _random.Next(1, _levelSize - 1);
                     previousDecalIndexes.Add(currentDecalIndex);
 
-                    GameObject newTile = new GameObject(tile, new Vector2(widthOffset, heightOffset), _answerContainer.Values.ElementAt(currentDecalIndex));
+                    GameObject newTile = new GameObject(tile, new Vector2(widthOffset, heightOffset), 
+                        _answerContainer.Values.ElementAt(currentDecalIndex));
+                    
+                    // TODO: need to set this to corresponding value:
+                    newTile.Index = previousDecalIndexes.IndexOf(currentDecalIndex);
+                    
                     _spriteComponent.AddToDrawables(newTile);
                     _collisionComponent.AddToCollidables(newTile);
                     
                     widthOffset += tile.Width;
-
                 }
 
                 heightOffset += tile.Height / 2;
@@ -67,7 +71,8 @@ namespace XNA_Innlevering2.Abstract
             }
 
             _levelIndex++;
-            _currentPuzzleObject = new PuzzleObject();
+            CurrentPuzzle = new PuzzleObject();
+            Game.Services.AddService(typeof(PuzzleObject), CurrentPuzzle);    
             
             SpawnPlayer();
             RefreshUI();
@@ -96,7 +101,7 @@ namespace XNA_Innlevering2.Abstract
             InterfaceComponent interfaceComponent =
                 (InterfaceComponent)Game.Services.GetService(typeof(InterfaceComponent));
 
-            interfaceComponent.Refresh(_levelIndex, _currentPuzzleObject.FirstNumber + "+" + _currentPuzzleObject.SecondNumber);
+            interfaceComponent.Refresh(_levelIndex, CurrentPuzzle.FirstNumber + "+" + CurrentPuzzle.SecondNumber);
         }
 
         public override void Update(GameTime gameTime)

@@ -14,6 +14,7 @@ namespace XNA_Innlevering2.GameObjects
         public Texture2D Sprite;
         public Texture2D Decal;
         public Rectangle Bounds;
+        public int Index;
 
         public GameObject(Texture2D sprite, Vector2 position)
         {
