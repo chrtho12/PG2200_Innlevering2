@@ -49,6 +49,7 @@ namespace XNA_Innlevering2
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
+
             graphics.PreferredBackBufferHeight = WindowHeight;
             graphics.PreferredBackBufferWidth = WindowWidth;
         }
