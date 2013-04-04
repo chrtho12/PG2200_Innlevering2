@@ -14,23 +14,26 @@ namespace XNA_Innlevering2.GameObjects
     {
         public bool IsColliding { get; set; }
         public bool HasActivated { get; set; }
+        public bool HasWon { get; set; }
+        public bool Walking { get; set; }
 
         public PlayerObject(Texture2D sprite, Vector2 position) : base(sprite, position)
-        { }
+        {
+            HasWon = false;
+            HasActivated = false;
+            IsColliding = false;
+        }
 
         public void Move(Vector2 amount)
         {
-            Position += amount;    
+            Position += amount;
+            Walking = true;
         }
 
         public void Activate()
         {
-            if (IsColliding)
-            {
+            if (!Walking)
                 HasActivated = true;
-                Console.WriteLine("activated!");
-            }
-            
         }
 
         public void Update()
@@ -38,8 +41,7 @@ namespace XNA_Innlevering2.GameObjects
             Bounds.X = (int)Position.X;
             Bounds.Y = (int)Position.Y;
 
-            IsColliding = false;
-
+            IsColliding = false;            
         }
 
         

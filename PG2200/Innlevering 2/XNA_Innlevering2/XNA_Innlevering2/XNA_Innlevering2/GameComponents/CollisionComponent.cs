@@ -24,9 +24,7 @@ namespace XNA_Innlevering2.Abstract
 
         public CollisionComponent(Game game)
             : base(game)
-        {
-            // TODO: Construct any child components here
-        }
+        { }
 
         public override void Initialize()
         {
@@ -44,10 +42,16 @@ namespace XNA_Innlevering2.Abstract
             {
                 if (obj.Index == _puzzle.Answer)
                 {
-                    _player.IsColliding = true;    
-                } 
+                    _player.IsColliding = true;
+                }
             }
-            
+
+            if (_player.IsColliding && _player.HasActivated)
+            {
+                _player.HasWon = true;
+                _player.HasActivated = false;
+            }
+
             base.Update(gameTime);
         }
 

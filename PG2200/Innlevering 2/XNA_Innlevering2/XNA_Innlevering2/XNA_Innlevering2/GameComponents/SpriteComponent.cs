@@ -21,6 +21,8 @@ namespace XNA_Innlevering2.Abstract
         
         private SpriteBatch _spriteBatch;
 
+        private Texture2D _backgroundImage;
+
         private Camera _camera;
 
         public SpriteComponent(Game game)
@@ -35,6 +37,8 @@ namespace XNA_Innlevering2.Abstract
 
             _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
             _camera = (Camera)Game.Services.GetService(typeof(Camera));
+
+            _backgroundImage = Game.Content.Load<Texture2D>(@"sprites\bgscreen");
         }
 
         public override void Initialize()
@@ -55,6 +59,8 @@ namespace XNA_Innlevering2.Abstract
             base.Draw(gameTime);
 
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, _camera.GetTransformation(GraphicsDevice));
+
+            _spriteBatch.Draw(_backgroundImage, new Vector2(-400, -400), Color.White);
 
                 foreach (GameObject o in _sceneObjects)
                 {

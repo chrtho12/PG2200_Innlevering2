@@ -23,6 +23,7 @@ namespace XNA_Innlevering2
 
         private SpriteComponent _spriteComponent;
         private CollisionComponent _collisionComponent;
+        private SoundComponent _soundComponent;
 
         private InterfaceComponent _interfaceComponent;
 
@@ -33,6 +34,7 @@ namespace XNA_Innlevering2
         public const int WindowWidth = 600;
 
         private PlayerObject _player;
+        private Texture2D _playerTexture;
         private Camera _camera;
 
         public Game1()
@@ -40,7 +42,10 @@ namespace XNA_Innlevering2
             graphics = new GraphicsDeviceManager(this);
             
             _spriteComponent = new SpriteComponent(this);
-            Services.AddService(typeof(SpriteComponent), _spriteComponent);    
+            Services.AddService(typeof(SpriteComponent), _spriteComponent);
+
+            _soundComponent = new SoundComponent(this);
+            Services.AddService(typeof(SoundComponent), _soundComponent);
 
             _interfaceComponent = new InterfaceComponent(this);
             Services.AddService(typeof(InterfaceComponent), _interfaceComponent);    
@@ -49,7 +54,7 @@ namespace XNA_Innlevering2
             Services.AddService(typeof(CollisionComponent), _collisionComponent);    
 
             _inputManager = new InputManager(this);
-            
+
             _sceneManager = new SceneManager(this);
 
             _camera = new Camera();
@@ -57,7 +62,6 @@ namespace XNA_Innlevering2
             
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-
 
             graphics.PreferredBackBufferHeight = WindowHeight;
             graphics.PreferredBackBufferWidth = WindowWidth;
@@ -71,6 +75,7 @@ namespace XNA_Innlevering2
             Components.Add(_sceneManager);
             Components.Add(_collisionComponent);
             Components.Add(_inputManager);
+            Components.Add(_soundComponent);
 
             base.Initialize();
         }
@@ -78,9 +83,8 @@ namespace XNA_Innlevering2
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _sceneManager.GenerateNewLevel(new Vector2(4, 4));
+            spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _inputManager.AddAction("move up");
             _inputManager["move up"].Add(Keys.Up);
@@ -109,6 +113,7 @@ namespace XNA_Innlevering2
             _inputManager.AddAction("move camera right");
             _inputManager["move camera right"].Add(Keys.D);
 
+            _sceneManager.GenerateNewLevel(new Vector2(4, 4));
         }
 
         protected override void UnloadContent()
@@ -121,7 +126,7 @@ namespace XNA_Innlevering2
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            _inputManager.Update();
+           _inputManager.Update();
 
             _player = (PlayerObject)Services.GetService(typeof(PlayerObject));
             
@@ -151,6 +156,13 @@ namespace XNA_Innlevering2
 
             if (_inputManager["move camera right"].IsDown)
                 _camera.Move(new Vector2(10f, 0f));
+
+
+            if (_player.HasWon)
+            {
+                _sceneManager.GenerateNewLevel(new Vector2(4,4));
+                _player.HasWon = false;
+            }
 
             base.Update(gameTime);
         }

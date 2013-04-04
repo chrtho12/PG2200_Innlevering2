@@ -22,7 +22,7 @@ namespace XNA_Innlevering2.GameObjects
             Sprite = sprite;
             Decal = null;
 
-            Bounds = new Rectangle((int)position.X, (int)position.Y, sprite.Width, sprite.Height);
+            Bounds = new Rectangle((int)position.X, (int)position.Y, sprite.Width, sprite.Height / 2);
         }
 
         public GameObject(Texture2D sprite, Vector2 position, Texture2D decal) : this(sprite, position)
