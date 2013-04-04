@@ -16,6 +16,7 @@ namespace XNA_Innlevering2.GameObjects
         public bool HasActivated { get; set; }
         public bool HasWon { get; set; }
         public bool Walking { get; set; }
+        private float _speed = 0.8f;
 
         public PlayerObject(Texture2D sprite, Vector2 position) : base(sprite, position)
         {
@@ -26,7 +27,17 @@ namespace XNA_Innlevering2.GameObjects
 
         public void Move(Vector2 amount)
         {
-            Position += amount;
+            Position += amount * _speed;
+
+            if (Position.X >= 375)
+               Position = new Vector2(375, Position.Y);
+            if (Position.X <= -25)
+                Position = new Vector2(-25, Position.Y);
+            if (Position.Y <= -5)
+                Position = new Vector2(Position.X, -5);
+            if (Position.Y >= 260)
+                Position = new Vector2(Position.X, 260);
+
             Walking = true;
         }
 
@@ -40,8 +51,6 @@ namespace XNA_Innlevering2.GameObjects
         {
             Bounds.X = (int)Position.X;
             Bounds.Y = (int)Position.Y;
-
-            IsColliding = false;            
         }
 
         

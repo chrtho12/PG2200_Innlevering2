@@ -161,7 +161,6 @@ namespace XNA_Innlevering2
             if (_player.HasWon)
             {
                 _sceneManager.GenerateNewLevel(new Vector2(4,4));
-                _player.HasWon = false;
             }
 
             base.Update(gameTime);

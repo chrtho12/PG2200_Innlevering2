@@ -13,9 +13,6 @@ using XNA_Innlevering2.Abstract;
 
 namespace XNA_Innlevering2.GameComponents
 {
-    /// <summary>
-    /// This is a game component that implements IUpdateable.
-    /// </summary>
     public class InterfaceComponent : DrawableGameComponent
     {
         private SpriteBatch _spriteBatch;
@@ -44,9 +41,9 @@ namespace XNA_Innlevering2.GameComponents
 
             UIFont = Game.Content.Load<SpriteFont>(@"fonts\UIFont");
 
-            _levelIndicatorSpace = new Vector2(Game1.WindowWidth / 8f, 0);
-            _puzzleToSolveSpace = new Vector2(Game1.WindowWidth / 2f, 0);
-            _instructionSpace = new Vector2(Game1.WindowWidth / 5f, Game1.WindowHeight / 1.1f);
+            _levelIndicatorSpace = new Vector2(Game1.WindowWidth / 8f, 20);
+            _puzzleToSolveSpace = new Vector2(Game1.WindowWidth / 2f, 20);
+            _instructionSpace = new Vector2(Game1.WindowWidth / 5f, Game1.WindowHeight / 1.15f);
         }
 
         public override void Initialize()
@@ -71,9 +68,9 @@ namespace XNA_Innlevering2.GameComponents
 
             _spriteBatch.Begin();
 
-            _spriteBatch.DrawString(UIFont, "Level: " + _levelText, _levelIndicatorSpace, Color.Thistle);
-            _spriteBatch.DrawString(UIFont, "Puzzle: " + _puzzleText, _puzzleToSolveSpace, Color.Wheat);
-            _spriteBatch.DrawString(UIFont, "Arrow keys to move character\n   WASD to move camera", _instructionSpace, Color.YellowGreen);
+            _spriteBatch.DrawString(UIFont, "Level: " + _levelText, _levelIndicatorSpace, Color.MistyRose);
+            _spriteBatch.DrawString(UIFont, "Puzzle: " + _puzzleText, _puzzleToSolveSpace, Color.MistyRose);
+            _spriteBatch.DrawString(UIFont, "[Arrow keys] to move character\n      [WASD] to move camera\n        [Space] to activate tile", _instructionSpace, Color.MistyRose);
 
             _spriteBatch.End();
 

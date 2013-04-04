@@ -60,7 +60,7 @@ namespace XNA_Innlevering2.Abstract
 
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, _camera.GetTransformation(GraphicsDevice));
 
-            _spriteBatch.Draw(_backgroundImage, new Vector2(-400, -400), Color.White);
+            _spriteBatch.Draw(_backgroundImage, new Vector2(-750, -500), Color.White);
 
                 foreach (GameObject o in _sceneObjects)
                 {
@@ -68,7 +68,7 @@ namespace XNA_Innlevering2.Abstract
 
                     if (o.Decal != null)
                     {
-                        _spriteBatch.Draw(o.Decal, o.Position, Color.White);
+                        _spriteBatch.Draw(o.Decal, new Vector2(o.Position.X + (o.Sprite.Width / 3), o.Position.Y + (o.Sprite.Height / 5)), Color.White);
                     }
                 }
 

@@ -13,10 +13,11 @@ namespace XNA_Innlevering2.GameObjects
         public Vector2 position { get; set; }
         public Matrix transform { get; set; }
 
-        private int _cameraBoundLeft = -400;
-        private int _cameraBoundRight = 400;
-        private int _cameraBoundUp = 400;
-        private int _cameraBoundDown = -400;
+        private int _cameraBoundLeft = -200;
+        private int _cameraBoundRight = 200;
+        private int _cameraBoundDown = -100;
+        private int _cameraBoundUp = 100;
+        
 
         public Camera()
         {

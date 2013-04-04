@@ -40,16 +40,10 @@ namespace XNA_Innlevering2.Abstract
 
             foreach (var obj in _sceneObjects.Where(obj => _player.Bounds.Intersects(obj.Bounds)))
             {
-                if (obj.Index == _puzzle.Answer)
+                if ((obj.Index == _puzzle.Answer) && _player.HasActivated)
                 {
-                    _player.IsColliding = true;
+                    _player.HasWon = true;
                 }
-            }
-
-            if (_player.IsColliding && _player.HasActivated)
-            {
-                _player.HasWon = true;
-                _player.HasActivated = false;
             }
 
             base.Update(gameTime);
