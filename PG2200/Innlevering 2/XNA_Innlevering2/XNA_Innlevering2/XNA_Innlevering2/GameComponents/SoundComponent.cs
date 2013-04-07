@@ -13,14 +13,19 @@ using XNA_Innlevering2.GameObjects;
 
 namespace XNA_Innlevering2.GameComponents
 {
-    public class SoundComponent : Microsoft.Xna.Framework.GameComponent
+    public class SoundComponent : GameComponent
     {
-        private Dictionary<string, SoundEffect> _soundBank;
+        private Dictionary<string, SoundEffect> _soundEffectLibrary;
         private PlayerObject _player;
-        private bool _isPlaying = false;
+        private bool _isPaused = false;
+        private bool _isLow = false;
+        private bool _isPlayingFirstSong = false;
 
         private int _timer;
         private int _soundInterval = 10;
+        private Random random;
+
+        private List<Song> _musicLibrary; 
         
         public SoundComponent(Game game)
             : base(game)
@@ -28,25 +33,32 @@ namespace XNA_Innlevering2.GameComponents
 
         public override void Initialize()
         {
-            
-            _soundBank = new Dictionary<string, SoundEffect>
+            _musicLibrary = new List<Song>
+                {
+                    Game.Content.Load<Song>(@"soundfx\music1"),
+                    Game.Content.Load<Song>(@"soundfx\music2")
+                };
+
+            _soundEffectLibrary = new Dictionary<string, SoundEffect>
                 {
                     {"walk", Game.Content.Load<SoundEffect>(@"soundfx\walk")},
-                    {"music", Game.Content.Load<SoundEffect>(@"soundfx\music")},
                     {"fail", Game.Content.Load<SoundEffect>(@"soundfx\fail")},
                     {"succeed", Game.Content.Load<SoundEffect>(@"soundfx\succeed")}
                 };
 
-            PlayBackgoundMusic();
+            random = new Random();
+
+            PlayBackgroundMusic();
 
             base.Initialize();
         }
 
-        public void PlaySound(string name)
+        
+        public void PlaySoundEffect(string name)
         {
             if (_timer >= _soundInterval)
             {
-                _soundBank[name].Play();
+                _soundEffectLibrary[name].Play();
                 _timer = 0;
             }
 
@@ -54,32 +66,81 @@ namespace XNA_Innlevering2.GameComponents
                 _timer++;
         }
 
-        public void PlayBackgoundMusic()
+        public void PlayBackgroundMusic()
         {
-            SoundEffectInstance bgmusic = _soundBank["music"].CreateInstance();
-            bgmusic.IsLooped = true;
-            bgmusic.Play();
+
+            if (_isPlayingFirstSong)
+            {
+                MediaPlayer.Play(_musicLibrary[1]);
+                _isPlayingFirstSong = false;
+            }
+
+            else
+            {
+                MediaPlayer.Play(_musicLibrary[0]);
+                _isPlayingFirstSong = true;
+            }
+
+            InterfaceComponent.SoundActive = true;
+        }
+
+        public void StopBackgroundMusic()
+        {
+            InterfaceComponent.SoundActive = false;
+            MediaPlayer.Stop();
+        }
+
+        public void AdjustVolumeUp()
+        {
+            MediaPlayer.Volume += 0.1f;
+        }
+
+        public void AdjustVolumeDown()
+        {
+            MediaPlayer.Volume -= 0.1f;
+        }
+
+        public void PauseBackgroundMusic()
+        {
+            if (!_isPaused)
+            {
+                MediaPlayer.Pause();
+                _isPaused = true;
+                InterfaceComponent.SoundActive = false;
+            } else
+            {
+                MediaPlayer.Resume();
+                InterfaceComponent.SoundActive = true;
+                _isPaused = false;
+            }
         }
 
         public override void Update(GameTime gameTime)
         {
+
             _player = (PlayerObject)Game.Services.GetService(typeof(PlayerObject));
+
+            if (InterfaceComponent.SoundClicked)
+            {
+                StopBackgroundMusic();
+                InterfaceComponent.SoundClicked = false;
+            }
 
             if (_player.HasActivated && _player.HasWon)
             {
-                _soundBank["succeed"].Play();
+                _soundEffectLibrary["succeed"].Play();
                 _player.HasActivated = false;
             }
 
-            if (_player.Walking)
+            if (_player.isWalking)
             {
-                PlaySound("walk");
-                _player.Walking = false;
+                PlaySoundEffect("walk");
+                _player.isWalking = false;
             }
 
             if (_player.HasActivated && !_player.HasWon)
             {
-                PlaySound("fail");
+                PlaySoundEffect("fail");
                 _player.HasActivated = false;
             }
 

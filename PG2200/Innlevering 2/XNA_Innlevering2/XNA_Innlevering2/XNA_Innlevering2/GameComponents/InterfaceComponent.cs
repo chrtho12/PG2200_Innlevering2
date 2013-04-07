@@ -21,11 +21,21 @@ namespace XNA_Innlevering2.GameComponents
         
         private int _levelText;
         private string _puzzleText;
-        private string _instructionText;
+        private string _instructionText = "[Arrow keys] to move character\n      [Space] to activate tile";
 
         private Vector2 _levelIndicatorSpace;
         private Vector2 _puzzleToSolveSpace;
         private Vector2 _instructionSpace;
+        private Rectangle _soundIconSpace;
+
+        private Texture2D _soundIcon;
+
+        private MouseState _currentMouseState;
+        private Rectangle _mousePosition;
+        private Texture2D _cursor;
+
+        public static bool SoundActive { get; set; }
+        public static bool SoundClicked { get; set; }
 
         public InterfaceComponent(Game game)
             : base(game)
@@ -40,10 +50,13 @@ namespace XNA_Innlevering2.GameComponents
             _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
             UIFont = Game.Content.Load<SpriteFont>(@"fonts\UIFont");
+            _soundIcon = Game.Content.Load<Texture2D>(@"sprites\sound");
+            _cursor = Game.Content.Load<Texture2D>(@"sprites\cursor");
 
             _levelIndicatorSpace = new Vector2(Game1.WindowWidth / 8f, 20);
             _puzzleToSolveSpace = new Vector2(Game1.WindowWidth / 2f, 20);
             _instructionSpace = new Vector2(Game1.WindowWidth / 5f, Game1.WindowHeight / 1.15f);
+            _soundIconSpace = new Rectangle(0, Game1.WindowHeight - _soundIcon.Height, _soundIcon.Width, _soundIcon.Height);
         }
 
         public override void Initialize()
@@ -51,13 +64,16 @@ namespace XNA_Innlevering2.GameComponents
             base.Initialize();
         }
 
-        /// <summary>
-        /// Allows the game component to update itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            // TODO: Add your update code here
+            _currentMouseState = Mouse.GetState();
+
+            _mousePosition = new Rectangle(_currentMouseState.X, _currentMouseState.Y, 25, 25);
+
+            if (_mousePosition.Intersects(_soundIconSpace) && _currentMouseState.LeftButton == ButtonState.Pressed)
+            {
+                SoundClicked = true;
+            }
 
             base.Update(gameTime);
         }
@@ -68,9 +84,13 @@ namespace XNA_Innlevering2.GameComponents
 
             _spriteBatch.Begin();
 
+            _spriteBatch.Draw(_soundIcon, _soundIconSpace, SoundActive ? Color.MistyRose : Color.DarkRed);
+
             _spriteBatch.DrawString(UIFont, "Level: " + _levelText, _levelIndicatorSpace, Color.MistyRose);
             _spriteBatch.DrawString(UIFont, "Puzzle: " + _puzzleText, _puzzleToSolveSpace, Color.MistyRose);
-            _spriteBatch.DrawString(UIFont, "[Arrow keys] to move character\n      [WASD] to move camera\n        [Space] to activate tile", _instructionSpace, Color.MistyRose);
+            _spriteBatch.DrawString(UIFont, _instructionText, _instructionSpace, Color.MistyRose);
+
+            _spriteBatch.Draw(_cursor, _mousePosition, Color.MistyRose);
 
             _spriteBatch.End();
 

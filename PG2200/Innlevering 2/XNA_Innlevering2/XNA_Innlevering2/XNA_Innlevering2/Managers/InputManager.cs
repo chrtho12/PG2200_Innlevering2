@@ -13,11 +13,6 @@ using XNA_Innlevering2.GameObjects;
 
 namespace XNA_Innlevering2.GameComponents
 {
-    interface IControllable
-    {
-        void RegisterControls();
-    }
-
     public class InputManager : GameComponent
     {
         private List<Action> actions;
@@ -52,7 +47,6 @@ namespace XNA_Innlevering2.GameComponents
         }
     }
 
-    
     public class Action
     {
         public String name;

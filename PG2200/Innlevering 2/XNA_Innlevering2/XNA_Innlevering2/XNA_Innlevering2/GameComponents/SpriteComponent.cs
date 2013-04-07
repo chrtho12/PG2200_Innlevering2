@@ -70,6 +70,8 @@ namespace XNA_Innlevering2.Abstract
                     {
                         _spriteBatch.Draw(o.Decal, new Vector2(o.Position.X + (o.Sprite.Width / 3), o.Position.Y + (o.Sprite.Height / 5)), Color.White);
                     }
+
+                    // TODO: endre player-texture til flyvende når ikke kolliderer
                 }
 
             _spriteBatch.End();

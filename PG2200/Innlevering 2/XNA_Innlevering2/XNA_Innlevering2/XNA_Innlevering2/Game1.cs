@@ -61,7 +61,7 @@ namespace XNA_Innlevering2
             Services.AddService(typeof(Camera), _camera);    
             
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = false;
 
             graphics.PreferredBackBufferHeight = WindowHeight;
             graphics.PreferredBackBufferWidth = WindowWidth;
@@ -88,30 +88,23 @@ namespace XNA_Innlevering2
 
             _inputManager.AddAction("move up");
             _inputManager["move up"].Add(Keys.Up);
-            
             _inputManager.AddAction("move down");
             _inputManager["move down"].Add(Keys.Down);
-            
             _inputManager.AddAction("move left");
             _inputManager["move left"].Add(Keys.Left);
-            
             _inputManager.AddAction("move right");
             _inputManager["move right"].Add(Keys.Right);
-            
             _inputManager.AddAction("activate");
             _inputManager["activate"].Add(Keys.Space);
 
-            _inputManager.AddAction("move camera up");
-            _inputManager["move camera up"].Add(Keys.W);
-            
-            _inputManager.AddAction("move camera down");
-            _inputManager["move camera down"].Add(Keys.S);
-            
-            _inputManager.AddAction("move camera left");
-            _inputManager["move camera left"].Add(Keys.A);
-            
-            _inputManager.AddAction("move camera right");
-            _inputManager["move camera right"].Add(Keys.D);
+            _inputManager.AddAction("pause/resume music");
+            _inputManager["pause/resume music"].Add(Keys.P);
+            _inputManager.AddAction("change track");
+            _inputManager["change track"].Add(Keys.O);
+            _inputManager.AddAction("adjust volume up");
+            _inputManager["adjust volume up"].Add(Keys.I);
+            _inputManager.AddAction("adjust volume down");
+            _inputManager["adjust volume down"].Add(Keys.K);
 
             _sceneManager.GenerateNewLevel(new Vector2(4, 4));
         }
@@ -119,43 +112,54 @@ namespace XNA_Innlevering2
         protected override void UnloadContent()
         {
         }
-
-
+        
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
-
-           _inputManager.Update();
-
+            _inputManager.Update();
             _player = (PlayerObject)Services.GetService(typeof(PlayerObject));
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                this.Exit();
             
             if (_inputManager["move up"].IsDown)
+            {
                 _player.Move(new Vector2(0f, -10f));
+                _camera.Move(new Vector2(0f, -10f));
+            }
 
             if (_inputManager["move down"].IsDown)
+            {
                 _player.Move(new Vector2(0f, 10f));
+                _camera.Move(new Vector2(0f, 10f));
+            }
 
             if (_inputManager["move left"].IsDown)
+            {
                 _player.Move(new Vector2(-10f, 0f));
+                _camera.Move(new Vector2(-10f, 0f));
+            }
 
             if (_inputManager["move right"].IsDown)
+            {
                 _player.Move(new Vector2(10f, 0f));
-
+                _camera.Move(new Vector2(10f, 0f));
+            }
+                
             if (_inputManager["activate"].IsDown)
                 _player.Activate();
+            
 
-            if (_inputManager["move camera up"].IsDown)
-                _camera.Move(new Vector2(0f, -10f));
+            if (_inputManager["pause/resume music"].IsDown)
+                _soundComponent.PauseBackgroundMusic();
+            
+            if (_inputManager["change track"].IsDown)
+                _soundComponent.PlayBackgroundMusic();
 
-            if (_inputManager["move camera down"].IsDown)
-                _camera.Move(new Vector2(0f, 10f));
+            if (_inputManager["adjust volume up"].IsDown)
+                _soundComponent.AdjustVolumeUp();
 
-            if (_inputManager["move camera left"].IsDown)
-                _camera.Move(new Vector2(-10f, 0f));
-
-            if (_inputManager["move camera right"].IsDown)
-                _camera.Move(new Vector2(10f, 0f));
+            if (_inputManager["adjust volume down"].IsDown)
+                _soundComponent.AdjustVolumeDown();
 
 
             if (_player.HasWon)

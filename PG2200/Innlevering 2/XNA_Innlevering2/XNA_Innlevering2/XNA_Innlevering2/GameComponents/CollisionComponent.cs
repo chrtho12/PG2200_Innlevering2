@@ -36,7 +36,7 @@ namespace XNA_Innlevering2.Abstract
         public override void Update(GameTime gameTime)
         {
             PlayerObject _player = (PlayerObject)Game.Services.GetService(typeof(PlayerObject));
-            PuzzleObject _puzzle = (PuzzleObject) Game.Services.GetService(typeof (PuzzleObject));
+            PuzzleObject _puzzle = (PuzzleObject)Game.Services.GetService(typeof (PuzzleObject));
 
             foreach (var obj in _sceneObjects.Where(obj => _player.Bounds.Intersects(obj.Bounds)))
             {
