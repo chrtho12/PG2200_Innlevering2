@@ -21,26 +21,29 @@ namespace XNA_Innlevering2
 
         SpriteBatch spriteBatch;
 
+        //define components
         private SpriteComponent _spriteComponent;
         private CollisionComponent _collisionComponent;
         private SoundComponent _soundComponent;
-
         private InterfaceComponent _interfaceComponent;
 
+        //define the managers
         private SceneManager _sceneManager;
         private InputManager _inputManager;
 
+        //set window properties
         public const int WindowHeight = 800;
         public const int WindowWidth = 600;
 
+        //create a player and a camera for the scene
         private PlayerObject _player;
-        private Texture2D _playerTexture;
         private Camera _camera;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            
+         
+            //instantiate new components and managers, assign as services
             _spriteComponent = new SpriteComponent(this);
             Services.AddService(typeof(SpriteComponent), _spriteComponent);
 
@@ -53,16 +56,19 @@ namespace XNA_Innlevering2
             _collisionComponent = new CollisionComponent(this);
             Services.AddService(typeof(CollisionComponent), _collisionComponent);    
 
+            _camera = new Camera();
+            Services.AddService(typeof(Camera), _camera);
+
             _inputManager = new InputManager(this);
 
             _sceneManager = new SceneManager(this);
-
-            _camera = new Camera();
-            Services.AddService(typeof(Camera), _camera);    
             
             Content.RootDirectory = "Content";
+            
+            //hide default mouse cursor; will use own version instead
             IsMouseVisible = false;
 
+            //set the resolution 
             graphics.PreferredBackBufferHeight = WindowHeight;
             graphics.PreferredBackBufferWidth = WindowWidth;
         }
@@ -70,6 +76,7 @@ namespace XNA_Innlevering2
 
         protected override void Initialize()
         {
+            //add the components to run parallell methods with game1.cs
             Components.Add(_spriteComponent);
             Components.Add(_interfaceComponent);
             Components.Add(_sceneManager);
@@ -86,6 +93,9 @@ namespace XNA_Innlevering2
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            //add keys and descriptions for input manager:
+            
+            //player actions:
             _inputManager.AddAction("move up");
             _inputManager["move up"].Add(Keys.Up);
             _inputManager.AddAction("move down");
@@ -97,6 +107,7 @@ namespace XNA_Innlevering2
             _inputManager.AddAction("activate");
             _inputManager["activate"].Add(Keys.Space);
 
+            //sound actions:
             _inputManager.AddAction("pause/resume music");
             _inputManager["pause/resume music"].Add(Keys.P);
             _inputManager.AddAction("change track");
@@ -106,6 +117,7 @@ namespace XNA_Innlevering2
             _inputManager.AddAction("adjust volume down");
             _inputManager["adjust volume down"].Add(Keys.K);
 
+            //generate a new 4x4 level (currently only supports 4 by 4)
             _sceneManager.GenerateNewLevel(new Vector2(4, 4));
         }
 
@@ -115,14 +127,20 @@ namespace XNA_Innlevering2
         
         protected override void Update(GameTime gameTime)
         {
+            //update the input manager
             _inputManager.Update();
+            
+            //retrieve player as service
             _player = (PlayerObject)Services.GetService(typeof(PlayerObject));
 
+            //to exit, press escape
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
             
+            //check if the different keys in the input manager are pressed
             if (_inputManager["move up"].IsDown)
             {
+                //link player and camera movement
                 _player.Move(new Vector2(0f, -10f));
                 _camera.Move(new Vector2(0f, -10f));
             }
@@ -144,24 +162,25 @@ namespace XNA_Innlevering2
                 _player.Move(new Vector2(10f, 0f));
                 _camera.Move(new Vector2(10f, 0f));
             }
-                
-            if (_inputManager["activate"].IsDown)
+            
+            //activate action
+            if (_inputManager["activate"].IsTapped)
                 _player.Activate();
             
-
-            if (_inputManager["pause/resume music"].IsDown)
+            // ajust sound options
+            if (_inputManager["pause/resume music"].IsTapped)
                 _soundComponent.PauseBackgroundMusic();
             
-            if (_inputManager["change track"].IsDown)
+            if (_inputManager["change track"].IsTapped)
                 _soundComponent.PlayBackgroundMusic();
 
-            if (_inputManager["adjust volume up"].IsDown)
+            if (_inputManager["adjust volume up"].IsTapped)
                 _soundComponent.AdjustVolumeUp();
 
-            if (_inputManager["adjust volume down"].IsDown)
+            if (_inputManager["adjust volume down"].IsTapped)
                 _soundComponent.AdjustVolumeDown();
 
-
+            //if player every finds the puzzle answer and his boolean is set to true, load a new level
             if (_player.HasWon)
             {
                 _sceneManager.GenerateNewLevel(new Vector2(4,4));
@@ -176,6 +195,8 @@ namespace XNA_Innlevering2
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
+
+            //nothing to draw here :(
 
             spriteBatch.End();
 

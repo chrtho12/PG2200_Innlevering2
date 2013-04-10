@@ -15,30 +15,38 @@ namespace XNA_Innlevering2.GameComponents
 {
     public class InputManager : GameComponent
     {
+        // create a list of actions
         private List<Action> actions;
 
         public InputManager(Game game) : base(game)
         {
+            //instantiate the list of actions
             actions = new List<Action>();
         }
 
         public void AddAction(String ActionName)
         {
-            actions.Add(new Action(this, ActionName));
+            //adding an action with the manager, calls the add method for the new action instantiated
+            actions.Add(new Action(ActionName));
         }
 
+        //public field
         public Action this[String actionName]
         {
+            // finds a given action by matching the name supplied with the name in the action lists
             get
             {
-                return actions.Find(a => a.name == actionName);
+                //returns if name equals supplied name
+                return actions.Find(a => a.Name == actionName);
             }
         }
 
         public void Update()
         {
+            //gets the current keyboard state every update
             KeyboardState kbState = Keyboard.GetState();
 
+            //update every action in the action list every update
             foreach (Action a in actions)
             {
                 a.Update(kbState);
@@ -49,34 +57,42 @@ namespace XNA_Innlevering2.GameComponents
 
     public class Action
     {
-        public String name;
-        List<Keys> keyList = new List<Keys>();
+        //the name for the key
+        public String Name;
         
-        private InputManager parent = null;
+        // a list of keys for a given function
+        private List<Keys> _keyList = new List<Keys>();
+        
+        //record status of current and previous states of the key
         private bool currentStatus = false;
         private bool previousStatus = false;
 
+        //two states: tapped or held down
         public bool IsDown { get { return currentStatus; } }
         public bool IsTapped { get { return (currentStatus) && (!previousStatus); } }
 
-        public Action(InputManager inputManager, String n)
+        //when new action is created, associate it with a name
+        public Action(String name)
         {
-            parent = inputManager;
-            name = n;
+            Name = name;
         }
 
+        //add new key method
         public void Add(Keys key)
         {
-            if (!keyList.Contains(key))
-                keyList.Add(key);
+            //make sure the key doesn't exist already, before adding to list
+            if (!_keyList.Contains(key))
+                _keyList.Add(key);
         }
 
         internal void Update(KeyboardState kbState)
         {
+            //check button press when updated...
             previousStatus = currentStatus;
             currentStatus = false;
 
-            foreach (Keys k in keyList)
+            //... for every key in the list
+            foreach (Keys k in _keyList)
                 if (kbState.IsKeyDown(k))
                     currentStatus = true;
         }

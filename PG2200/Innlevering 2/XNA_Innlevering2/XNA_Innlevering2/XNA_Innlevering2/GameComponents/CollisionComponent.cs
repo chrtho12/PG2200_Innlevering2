@@ -9,15 +9,9 @@ using XNA_Innlevering2.Abstract;
 
 namespace XNA_Innlevering2.Abstract
 {
-    interface ICollidable
+    public class CollisionComponent : GameComponent
     {
-        void AddToCollidables(GameObject gameObject);
-        void RemoveFromCollidables(GameObject gameObject);
-        void ClearCollidables();
-    }
-
-    public class CollisionComponent : GameComponent, ICollidable
-    {
+        // the list of scene objects
         private List<GameObject> _sceneObjects;
 
         public bool IsColliding;
@@ -28,6 +22,7 @@ namespace XNA_Innlevering2.Abstract
 
         public override void Initialize()
         {
+            //create a new list, assign it to the scene objects
             _sceneObjects = new List<GameObject>();
             
             base.Initialize();
@@ -35,13 +30,17 @@ namespace XNA_Innlevering2.Abstract
 
         public override void Update(GameTime gameTime)
         {
+            //retrieve services
             PlayerObject _player = (PlayerObject)Game.Services.GetService(typeof(PlayerObject));
             PuzzleObject _puzzle = (PuzzleObject)Game.Services.GetService(typeof (PuzzleObject));
 
+            //iterate over every object that has been sent to the list and check if they collide with the player
             foreach (var obj in _sceneObjects.Where(obj => _player.Bounds.Intersects(obj.Bounds)))
             {
+                //if the player collides AND he collides with a an object with a decal index that corresponds to the puzzle answer AND he has activated it...
                 if ((obj.Index == _puzzle.Answer) && _player.HasActivated)
                 {
+                    //... player wins, and a new level is loaded
                     _player.HasWon = true;
                 }
             }
@@ -51,6 +50,7 @@ namespace XNA_Innlevering2.Abstract
 
         public void AddToCollidables(GameObject gameObject)
         {
+            //add object to list
             if (gameObject == null || _sceneObjects.Contains(gameObject))
                 return;
 
@@ -59,11 +59,13 @@ namespace XNA_Innlevering2.Abstract
 
         public void RemoveFromCollidables(GameObject gameObject)
         {
+            //remove object from list
             _sceneObjects.Remove(gameObject);
         }
 
         public void ClearCollidables()
         {
+            //clear the scene for objects completely
             _sceneObjects.Clear();
         }
     }

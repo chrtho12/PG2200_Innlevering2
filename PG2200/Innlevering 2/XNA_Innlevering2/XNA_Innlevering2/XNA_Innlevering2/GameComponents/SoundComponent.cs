@@ -33,6 +33,7 @@ namespace XNA_Innlevering2.GameComponents
 
         public override void Initialize()
         {
+            //initialize new libraries for music and sfx
             _musicLibrary = new List<Song>
                 {
                     Game.Content.Load<Song>(@"soundfx\music1"),
@@ -48,6 +49,7 @@ namespace XNA_Innlevering2.GameComponents
 
             random = new Random();
 
+            //start background music
             PlayBackgroundMusic();
 
             base.Initialize();
@@ -56,8 +58,10 @@ namespace XNA_Innlevering2.GameComponents
         
         public void PlaySoundEffect(string name)
         {
+            // a timer that checks the frequency of the sound effect played
             if (_timer >= _soundInterval)
             {
+                //plays the sound effect based on the dictionary key and resets the timer.
                 _soundEffectLibrary[name].Play();
                 _timer = 0;
             }
@@ -68,7 +72,7 @@ namespace XNA_Innlevering2.GameComponents
 
         public void PlayBackgroundMusic()
         {
-
+            // a quick and dirty check to make sure you can switch between the two tracks
             if (_isPlayingFirstSong)
             {
                 MediaPlayer.Play(_musicLibrary[1]);
@@ -80,34 +84,41 @@ namespace XNA_Innlevering2.GameComponents
                 MediaPlayer.Play(_musicLibrary[0]);
                 _isPlayingFirstSong = true;
             }
-
+            
+            //boolean value to indicate that music is playing
             InterfaceComponent.SoundActive = true;
         }
 
         public void StopBackgroundMusic()
         {
+            //stops the music, sets the boolean to false
             InterfaceComponent.SoundActive = false;
             MediaPlayer.Stop();
         }
 
         public void AdjustVolumeUp()
         {
+            //increment sound volume
             MediaPlayer.Volume += 0.1f;
         }
 
         public void AdjustVolumeDown()
         {
+            //decrement sound volume
             MediaPlayer.Volume -= 0.1f;
         }
 
         public void PauseBackgroundMusic()
         {
+            //pause the music and ajust the corresponding booleans
             if (!_isPaused)
             {
                 MediaPlayer.Pause();
                 _isPaused = true;
                 InterfaceComponent.SoundActive = false;
-            } else
+            } 
+            
+            else
             {
                 MediaPlayer.Resume();
                 InterfaceComponent.SoundActive = true;
@@ -117,7 +128,7 @@ namespace XNA_Innlevering2.GameComponents
 
         public override void Update(GameTime gameTime)
         {
-
+            // checks to play sound effect, based on different boolean conditions set on the player object by the collision manager
             _player = (PlayerObject)Game.Services.GetService(typeof(PlayerObject));
 
             if (InterfaceComponent.SoundClicked)
