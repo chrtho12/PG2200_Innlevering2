@@ -8,15 +8,15 @@ using XNA_Innlevering2.GameObjects;
 
 namespace XNA_Innlevering2.Abstract
 {
-    // the drawable interface
-    interface IMyDrawable
+    // the listable interface
+    interface IListable
     {
-        void AddToDrawables(GameObject gameObject);
-        void RemoveFromDrawables(GameObject gameObject);
-        void ClearDrawables();
+        void AddTo(GameObject gameObject);
+        void RemoveFrom(GameObject gameObject);
+        void Clear();
     }
 
-    public class SpriteComponent : DrawableGameComponent, IMyDrawable
+    public class SpriteComponent : DrawableGameComponent, IListable
     {
         //create a new list of scene objects
         private List<GameObject> _sceneObjects;
@@ -81,7 +81,7 @@ namespace XNA_Innlevering2.Abstract
             _spriteBatch.End();
         }
 
-        public void AddToDrawables(GameObject gameObject)
+        public void AddTo(GameObject gameObject)
         {
             //add a drawable to the scene
             if (gameObject == null || _sceneObjects.Contains(gameObject))
@@ -90,13 +90,13 @@ namespace XNA_Innlevering2.Abstract
             _sceneObjects.Add(gameObject);
         }
 
-        public void RemoveFromDrawables(GameObject gameObject)
+        public void RemoveFrom(GameObject gameObject)
         {
             //remove a drawable from the scene
             _sceneObjects.Remove(gameObject);
         }
 
-        public void ClearDrawables()
+        public void Clear()
         {
             //clear the scene of drawables
             _sceneObjects.Clear();

@@ -39,19 +39,21 @@ namespace XNA_Innlevering2.Abstract
         public void GenerateNewLevel(Vector2 size)
         {
             //these clear the sprite- and- collision objects every time a new level is generated
-            _spriteComponent.ClearDrawables();
-            _collisionComponent.ClearCollidables();
+            _spriteComponent.Clear();
+            _collisionComponent.Clear();
 
             //offset values to increment and layout the map
             int heightOffset = 0;
             int widthOffset = 0;
 
-            //this container holds the decals that overlay each tile, and a corresponding int-value to compare them with
+            //this container holds the decals that overlay each tile, and a corresponding integer KEY to compare them with
             _answerContainer = new Dictionary<int, Texture2D>();
             LoadDecals();
 
             //load texture for the tiles
             Texture2D tile = Game.Content.Load<Texture2D>(@"sprites\BlockTile");
+
+            List<int> availableNumbers = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
 
             //for every column of the map...
             for (int i = 0; i < size.Y; i++)
@@ -59,19 +61,20 @@ namespace XNA_Innlevering2.Abstract
                 //for every row of the map...
                 for (int j = 0; j < size.X; j++)
                 {
-                    // assign a new random value to the current decal to be assigned
-                    int currentDecalIndex = _random.Next(1, _levelSize - 1);
+                    //put one random value from the available numbers list into currentDecalIndex. Remove the same value from the list.
+                    int currentDecalIndex = availableNumbers[_random.Next(availableNumbers.Count)];
+                    availableNumbers.Remove(currentDecalIndex);
 
-                    //create a new game object and assign it the tile texture. Also assign the currently stored tile decal with its corresponding index value
+                    //create a new game object and assign the tile texture. Also assign the currently stored tile decal and its corresponding index value.
                     GameObject newTile = new GameObject(tile, new Vector2(widthOffset, heightOffset),
-                        _answerContainer.Values.ElementAt(currentDecalIndex))
-                        {Index = _answerContainer.Keys.ElementAt(currentDecalIndex)};
+                        _answerContainer.Values.ElementAt(currentDecalIndex - 1))
+                        {Index = _answerContainer.Keys.ElementAt(currentDecalIndex - 1)};
 
                     //add the object as a sprite and a collision object
-                    _spriteComponent.AddToDrawables(newTile);
-                    _collisionComponent.AddToCollidables(newTile);
+                    _spriteComponent.AddTo(newTile);
+                    _collisionComponent.AddTo(newTile);
 
-                    //increment wdith offset, in anticipation of a new object to be created
+                    //increment width offset, in anticipation of a new object to be created
                     widthOffset += tile.Width;    
                     
                 }
@@ -93,7 +96,7 @@ namespace XNA_Innlevering2.Abstract
         public void LoadDecals()
         {
             //populates the answer container, according to level size and how the decal files are stored under the decals-directory
-            for (int i = 1; i < _levelSize; i++)
+            for (int i = 1; i < _levelSize + 1; i++)
             {
                 _answerContainer.Add(i, Game.Content.Load<Texture2D>(@"decals\" + i));
             }
@@ -123,7 +126,7 @@ namespace XNA_Innlevering2.Abstract
 
             Player = new PlayerObject(Game.Content.Load<Texture2D>(@"sprites\Player"), new Vector2(0, 0));
             Game.Services.AddService(typeof(PlayerObject), Player);    
-            _spriteComponent.AddToDrawables(Player);
+            _spriteComponent.AddTo(Player);
 
         }
         

@@ -9,7 +9,7 @@ using XNA_Innlevering2.Abstract;
 
 namespace XNA_Innlevering2.Abstract
 {
-    public class CollisionComponent : GameComponent
+    public class CollisionComponent : GameComponent, IListable
     {
         // the list of scene objects
         private List<GameObject> _sceneObjects;
@@ -48,7 +48,7 @@ namespace XNA_Innlevering2.Abstract
             base.Update(gameTime);
         }
 
-        public void AddToCollidables(GameObject gameObject)
+        public void AddTo(GameObject gameObject)
         {
             //add object to list
             if (gameObject == null || _sceneObjects.Contains(gameObject))
@@ -57,13 +57,13 @@ namespace XNA_Innlevering2.Abstract
             _sceneObjects.Add(gameObject);
         }
 
-        public void RemoveFromCollidables(GameObject gameObject)
+        public void RemoveFrom(GameObject gameObject)
         {
             //remove object from list
             _sceneObjects.Remove(gameObject);
         }
 
-        public void ClearCollidables()
+        public void Clear()
         {
             //clear the scene for objects completely
             _sceneObjects.Clear();

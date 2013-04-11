@@ -23,7 +23,6 @@ namespace XNA_Innlevering2.GameComponents
 
         private int _timer;
         private int _soundInterval = 10;
-        private Random random;
 
         private List<Song> _musicLibrary; 
         
@@ -47,8 +46,6 @@ namespace XNA_Innlevering2.GameComponents
                     {"succeed", Game.Content.Load<SoundEffect>(@"soundfx\succeed")}
                 };
 
-            random = new Random();
-
             //start background music
             PlayBackgroundMusic();
 
@@ -65,9 +62,15 @@ namespace XNA_Innlevering2.GameComponents
                 _soundEffectLibrary[name].Play();
                 _timer = 0;
             }
+            
+            // the fail effect plays regardless of interval or time
+            else if (name == "fail")
+            {
+                _soundEffectLibrary[name].Play();
+            }
 
-            else
-                _timer++;
+            _timer++;
+               
         }
 
         public void PlayBackgroundMusic()
@@ -110,14 +113,14 @@ namespace XNA_Innlevering2.GameComponents
 
         public void PauseBackgroundMusic()
         {
-            //pause the music and ajust the corresponding booleans
+            //pause or play the music and ajust the corresponding booleans
             if (!_isPaused)
             {
                 MediaPlayer.Pause();
                 _isPaused = true;
                 InterfaceComponent.SoundActive = false;
-            } 
-            
+            }
+
             else
             {
                 MediaPlayer.Resume();
