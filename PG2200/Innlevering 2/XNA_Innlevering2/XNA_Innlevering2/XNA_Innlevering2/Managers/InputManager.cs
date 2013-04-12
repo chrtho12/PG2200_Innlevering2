@@ -1,15 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using XNA_Innlevering2.GameObjects;
-
 
 namespace XNA_Innlevering2.GameComponents
 {
@@ -24,12 +16,6 @@ namespace XNA_Innlevering2.GameComponents
             actions = new List<Action>();
         }
 
-        public void AddAction(String ActionName)
-        {
-            //adding an action with the manager, calls the add method for the new action instantiated
-            actions.Add(new Action(ActionName));
-        }
-
         //public field
         public Action this[String actionName]
         {
@@ -39,6 +25,12 @@ namespace XNA_Innlevering2.GameComponents
                 //returns if name equals supplied name
                 return actions.Find(a => a.Name == actionName);
             }
+        }
+
+        public void AddAction(String ActionName)
+        {
+            //adding an action with the manager, calls the add method for the new action instantiated
+            actions.Add(new Action(ActionName));
         }
 
         public void Update()
@@ -51,7 +43,6 @@ namespace XNA_Innlevering2.GameComponents
             {
                 a.Update(kbState);
             }
-
         }
     }
 
@@ -59,23 +50,31 @@ namespace XNA_Innlevering2.GameComponents
     {
         //the name for the key
         public String Name;
-        
+
         // a list of keys for a given function
         private List<Keys> _keyList = new List<Keys>();
-        
+
         //record status of current and previous states of the key
-        private bool currentStatus = false;
-        private bool previousStatus = false;
+        private bool currentStatus;
+        private bool previousStatus;
 
-        //two states: tapped or held down
-        public bool IsDown { get { return currentStatus; } }
-        public bool IsTapped { get { return (currentStatus) && (!previousStatus); } }
-
-        //when new action is created, associate it with a name
         public Action(String name)
         {
             Name = name;
         }
+
+        //two states: tapped or held down
+        public bool IsDown
+        {
+            get { return currentStatus; }
+        }
+
+        public bool IsTapped
+        {
+            get { return (currentStatus) && (!previousStatus); }
+        }
+
+        //when new action is created, associate it with a name
 
         //add new key method
         public void Add(Keys key)
@@ -96,6 +95,5 @@ namespace XNA_Innlevering2.GameComponents
                 if (kbState.IsKeyDown(k))
                     currentStatus = true;
         }
-
     }
 }

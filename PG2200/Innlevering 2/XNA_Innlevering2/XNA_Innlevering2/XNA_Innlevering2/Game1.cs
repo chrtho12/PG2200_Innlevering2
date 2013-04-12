@@ -1,70 +1,57 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using XNA_Innlevering2.Abstract;
 using XNA_Innlevering2.GameComponents;
 using XNA_Innlevering2.GameObjects;
 
-
 namespace XNA_Innlevering2
 {
-
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-
-        SpriteBatch spriteBatch;
-
-        //define components
-        private SpriteComponent _spriteComponent;
-        private CollisionComponent _collisionComponent;
-        private SoundComponent _soundComponent;
-        private InterfaceComponent _interfaceComponent;
-
-        //define the managers
-        private SceneManager _sceneManager;
-        private InputManager _inputManager;
-
         //set window properties
         public const int WindowHeight = 800;
         public const int WindowWidth = 600;
 
         //create a player and a camera for the scene
-        private PlayerObject _player;
         private Camera _camera;
+        private CollisionComponent _collisionComponent;
+        private InputManager _inputManager;
+        private InterfaceComponent _interfaceComponent;
+        private PlayerObject _player;
+        private SceneManager _sceneManager;
+        private SoundComponent _soundComponent;
+        private SpriteComponent _spriteComponent;
+        private GraphicsDeviceManager graphics;
+
+        private SpriteBatch spriteBatch;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-         
+
             //instantiate new components and managers, assign as services
             _spriteComponent = new SpriteComponent(this);
-            Services.AddService(typeof(SpriteComponent), _spriteComponent);
+            Services.AddService(typeof (SpriteComponent), _spriteComponent);
 
             _soundComponent = new SoundComponent(this);
-            Services.AddService(typeof(SoundComponent), _soundComponent);
+            Services.AddService(typeof (SoundComponent), _soundComponent);
 
             _interfaceComponent = new InterfaceComponent(this);
-            Services.AddService(typeof(InterfaceComponent), _interfaceComponent);    
+            Services.AddService(typeof (InterfaceComponent), _interfaceComponent);
 
             _collisionComponent = new CollisionComponent(this);
-            Services.AddService(typeof(CollisionComponent), _collisionComponent);    
+            Services.AddService(typeof (CollisionComponent), _collisionComponent);
 
             _camera = new Camera();
-            Services.AddService(typeof(Camera), _camera);
+            Services.AddService(typeof (Camera), _camera);
 
             _inputManager = new InputManager(this);
 
             _sceneManager = new SceneManager(this);
-            
+
             Content.RootDirectory = "Content";
-            
+
             //hide default mouse cursor; will use own version instead
             IsMouseVisible = false;
 
@@ -90,11 +77,10 @@ namespace XNA_Innlevering2
 
         protected override void LoadContent()
         {
-
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //add keys and descriptions for input manager:
-            
+
             //player actions:
             _inputManager.AddAction("move up");
             _inputManager["move up"].Add(Keys.Up);
@@ -124,19 +110,19 @@ namespace XNA_Innlevering2
         protected override void UnloadContent()
         {
         }
-        
+
         protected override void Update(GameTime gameTime)
         {
             //update the input manager
             _inputManager.Update();
-            
+
             //retrieve player as service
-            _player = (PlayerObject)Services.GetService(typeof(PlayerObject));
+            _player = (PlayerObject) Services.GetService(typeof (PlayerObject));
 
             //to exit, press escape
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                this.Exit();
-            
+                Exit();
+
             //check if the different keys in the input manager are pressed
             if (_inputManager["move up"].IsDown)
             {
@@ -162,15 +148,15 @@ namespace XNA_Innlevering2
                 _player.Move(new Vector2(10f, 0f));
                 _camera.Move(new Vector2(10f, 0f));
             }
-            
+
             //activate action
             if (_inputManager["activate"].IsTapped)
                 _player.Activate();
-            
+
             // ajust sound options
             if (_inputManager["pause/resume music"].IsTapped)
                 _soundComponent.PauseBackgroundMusic();
-            
+
             if (_inputManager["change track"].IsTapped)
                 _soundComponent.PlayBackgroundMusic();
 
@@ -183,7 +169,7 @@ namespace XNA_Innlevering2
             //if player every finds the puzzle answer and his boolean is set to true, load a new level
             if (_player.HasWon)
             {
-                _sceneManager.GenerateNewLevel(new Vector2(4,4));
+                _sceneManager.GenerateNewLevel(new Vector2(4, 4));
             }
 
             base.Update(gameTime);

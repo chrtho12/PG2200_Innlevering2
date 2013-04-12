@@ -1,34 +1,26 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using XNA_Innlevering2.GameObjects;
-
 
 namespace XNA_Innlevering2.GameComponents
 {
     public class SoundComponent : GameComponent
     {
-        private Dictionary<string, SoundEffect> _soundEffectLibrary;
+        private bool _isPaused;
+        private bool _isPlayingFirstSong;
+
+        private List<Song> _musicLibrary;
         private PlayerObject _player;
-        private bool _isPaused = false;
-        private bool _isLow = false;
-        private bool _isPlayingFirstSong = false;
-
-        private int _timer;
+        private Dictionary<string, SoundEffect> _soundEffectLibrary;
         private int _soundInterval = 10;
+        private int _timer;
 
-        private List<Song> _musicLibrary; 
-        
         public SoundComponent(Game game)
             : base(game)
-        {}
+        {
+        }
 
         public override void Initialize()
         {
@@ -52,7 +44,7 @@ namespace XNA_Innlevering2.GameComponents
             base.Initialize();
         }
 
-        
+
         public void PlaySoundEffect(string name)
         {
             // a timer that checks the frequency of the sound effect played
@@ -63,14 +55,13 @@ namespace XNA_Innlevering2.GameComponents
                 _timer = 0;
             }
             
-            // the fail effect plays regardless of interval or time
+                // the fail effect plays regardless of interval or time
             else if (name == "fail")
             {
                 _soundEffectLibrary[name].Play();
             }
 
             _timer++;
-               
         }
 
         public void PlayBackgroundMusic()
@@ -87,7 +78,7 @@ namespace XNA_Innlevering2.GameComponents
                 MediaPlayer.Play(_musicLibrary[0]);
                 _isPlayingFirstSong = true;
             }
-            
+
             //boolean value to indicate that music is playing
             InterfaceComponent.SoundActive = true;
         }
@@ -132,7 +123,7 @@ namespace XNA_Innlevering2.GameComponents
         public override void Update(GameTime gameTime)
         {
             // checks to play sound effect, based on different boolean conditions set on the player object by the collision manager
-            _player = (PlayerObject)Game.Services.GetService(typeof(PlayerObject));
+            _player = (PlayerObject) Game.Services.GetService(typeof (PlayerObject));
 
             if (InterfaceComponent.SoundClicked)
             {

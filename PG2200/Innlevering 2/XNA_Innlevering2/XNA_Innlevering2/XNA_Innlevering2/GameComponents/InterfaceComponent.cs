@@ -1,47 +1,36 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using XNA_Innlevering2.Abstract;
-
 
 namespace XNA_Innlevering2.GameComponents
 {
     public class InterfaceComponent : DrawableGameComponent
     {
-        private SpriteBatch _spriteBatch;
-
         private SpriteFont UIFont;
-        
-        private int _levelText;
-        private string _puzzleText;
+        private MouseState _currentMouseState;
+        private Texture2D _cursor;
+        private Vector2 _instructionSpace;
+
         private string _instructionText = "[Arrow keys] to move character\n      [Space] to activate tile";
 
         private Vector2 _levelIndicatorSpace;
+        private int _levelText;
+        private Rectangle _mousePosition;
+        private string _puzzleText;
         private Vector2 _puzzleToSolveSpace;
-        private Vector2 _instructionSpace;
-        private Rectangle _soundIconSpace;
 
         private Texture2D _soundIcon;
-
-        private MouseState _currentMouseState;
-        private Rectangle _mousePosition;
-        private Texture2D _cursor;
-
-        public static bool SoundActive { get; set; }
-        public static bool SoundClicked { get; set; }
+        private Rectangle _soundIconSpace;
+        private SpriteBatch _spriteBatch;
 
         public InterfaceComponent(Game game)
             : base(game)
         {
             // TODO: Construct any child components here
         }
+
+        public static bool SoundActive { get; set; }
+        public static bool SoundClicked { get; set; }
 
         protected override void LoadContent()
         {
@@ -56,10 +45,11 @@ namespace XNA_Innlevering2.GameComponents
             _cursor = Game.Content.Load<Texture2D>(@"sprites\cursor");
 
             //define areas on the screen where the graphics go
-            _levelIndicatorSpace = new Vector2(Game1.WindowWidth / 8f, 20);
-            _puzzleToSolveSpace = new Vector2(Game1.WindowWidth / 2f, 20);
-            _instructionSpace = new Vector2(Game1.WindowWidth / 5f, Game1.WindowHeight / 1.15f);
-            _soundIconSpace = new Rectangle(0, Game1.WindowHeight - _soundIcon.Height, _soundIcon.Width, _soundIcon.Height);
+            _levelIndicatorSpace = new Vector2(Game1.WindowWidth/8f, 20);
+            _puzzleToSolveSpace = new Vector2(Game1.WindowWidth/2f, 20);
+            _instructionSpace = new Vector2(Game1.WindowWidth/5f, Game1.WindowHeight/1.15f);
+            _soundIconSpace = new Rectangle(0, Game1.WindowHeight - _soundIcon.Height, _soundIcon.Width,
+                                            _soundIcon.Height);
         }
 
         public override void Update(GameTime gameTime)
@@ -98,7 +88,6 @@ namespace XNA_Innlevering2.GameComponents
             _spriteBatch.Draw(_cursor, _mousePosition, Color.MistyRose);
 
             _spriteBatch.End();
-
         }
 
         public void Refresh(int level, string puzzle)
